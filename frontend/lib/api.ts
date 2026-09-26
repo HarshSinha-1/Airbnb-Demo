@@ -1,8 +1,9 @@
 import { USER_ID_STORAGE_KEY } from "./constants";
 import { ApiError, type Amenity, type AvailabilityRange, type Booking, type BookingCreate, type Category, type Envelope, type HostListingCard, type ListingCreate, type ListingDetail, type ListingFilters, type ListingUpdate, type PaginatedListings, type PriceQuote, type Review, type ReviewCreate, type User, type WishlistItem } from "./types";
 
-const BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL ?? "https://20-2-88-158.sslip.io";
+const BASE_URL = typeof window === 'undefined' 
+  ? (process.env.NEXT_PUBLIC_API_BASE_URL ?? "https://20-2-88-158.sslip.io")
+  : "";
 
 const FALLBACK_IMAGES = [
   "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200",
