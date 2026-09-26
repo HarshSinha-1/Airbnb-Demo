@@ -40,6 +40,7 @@ class Booking(Base):
     cleaning_fee: Mapped[float] = mapped_column(Float, nullable=False, default=0.0)
     service_fee: Mapped[float] = mapped_column(Float, nullable=False, default=0.0)
     total_price: Mapped[float] = mapped_column(Float, nullable=False)
+    currency: Mapped[str] = mapped_column(String(3), nullable=False, default="USD")
     status: Mapped[str] = mapped_column(
         String(20), nullable=False, default="confirmed"
     )

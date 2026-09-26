@@ -38,6 +38,7 @@ class ListingCard(BaseModel):
     city: str
     country: str
     price_per_night: float
+    currency: str = "USD"
     cover_image: str | None = None
     average_rating: float | None = None
     review_count: int = 0
@@ -59,6 +60,7 @@ class ListingDetail(BaseModel):
     lng: float
     price_per_night: float
     cleaning_fee: float
+    currency: str = "USD"
     max_guests: int
     bedrooms: int
     beds: int
@@ -82,6 +84,7 @@ class ListingCreate(BaseModel):
     lng: float = 0.0
     price_per_night: float = Field(..., gt=0)
     cleaning_fee: float = Field(default=0.0, ge=0)
+    currency: str = Field(default="USD", min_length=3, max_length=3)
     max_guests: int = Field(default=2, ge=1)
     bedrooms: int = Field(default=1, ge=0)
     beds: int = Field(default=1, ge=1)
@@ -101,6 +104,7 @@ class ListingUpdate(BaseModel):
     lng: float | None = None
     price_per_night: float | None = None
     cleaning_fee: float | None = None
+    currency: str | None = Field(default=None, min_length=3, max_length=3)
     max_guests: int | None = None
     bedrooms: int | None = None
     beds: int | None = None

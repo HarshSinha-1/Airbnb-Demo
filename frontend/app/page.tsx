@@ -1,6 +1,7 @@
 "use client";
 
 import { ListingsExplorer } from "@/components/listing/ListingsExplorer";
+import { CityCarousels } from "@/components/listing/CityCarousels";
 import type { FilterValues } from "@/components/listing/FilterModal";
 import { useMemo, useState } from "react";
 
@@ -14,11 +15,14 @@ export default function HomePage() {
   const filters = useMemo(() => ({ category }), [category]);
 
   return (
-    <ListingsExplorer
-      filters={filters}
-      onCategoryChange={setCategory}
-      extraFilters={extra}
-      onExtraFilters={setExtra}
-    />
+    <>
+      <CityCarousels />
+      <ListingsExplorer
+        filters={filters}
+        onCategoryChange={setCategory}
+        extraFilters={extra}
+        onExtraFilters={setExtra}
+      />
+    </>
   );
 }

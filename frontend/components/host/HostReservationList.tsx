@@ -1,4 +1,5 @@
-import { formatDateRange, formatMoney } from "@/lib/format";
+import { formatDateRange } from "@/lib/format";
+import { formatPrice } from "@/lib/formatPrice";
 import type { Booking } from "@/lib/types";
 
 export function HostReservationList({ bookings }: { bookings: Booking[] }) {
@@ -14,7 +15,7 @@ export function HostReservationList({ bookings }: { bookings: Booking[] }) {
             </div>
           </div>
           <div className="text-right">
-            <div className="font-semibold">{formatMoney(booking.total_price, true)}</div>
+            <div className="font-semibold">{formatPrice(booking.total_price, booking.currency, true)}</div>
             <div className="text-sm capitalize text-text-secondary">{booking.status}</div>
           </div>
         </div>

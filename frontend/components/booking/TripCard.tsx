@@ -1,6 +1,11 @@
-import { formatDateRange, formatMoney } from "@/lib/format";
+"use client";
+
+import { formatDateRange, parseISODate } from "@/lib/format";
+import { formatPrice } from "@/lib/formatPrice";
 import type { Booking } from "@/lib/types";
 import Link from "next/link";
+import { useState } from "react";
+import { ReviewModal } from "@/components/booking/ReviewModal";
 
 export function TripCard({
   booking,
@@ -11,6 +16,8 @@ export function TripCard({
   onCancel?: () => void;
   cancelling?: boolean;
 }) {
+  const [reviewOpen, setReviewOpen] = useState(false);
+  const isPast = parseISODate(booking.check_out).getTime() < new Date().setHours(0, 0, 0, 0);
   return (
     <article className="flex overflow-hidden rounded-xl border border-border-default">
       {booking.listing_cover_image ? (
@@ -27,7 +34,7 @@ export function TripCard({
           <p className="mt-2 text-text-secondary">
             {formatDateRange(booking.check_in, booking.check_out)} · {booking.guests} guests
           </p>
-          <p className="mt-2 font-semibold">{formatMoney(booking.total_price, true)}</p>
+          <p className="mt-2 font-semibold">{formatPrice(booking.total_price, booking.currency, true)}</p>
         </div>
         <div className="flex gap-3">
           <Link
@@ -46,8 +53,23 @@ export function TripCard({
               {cancelling ? "Cancelling…" : "Cancel reservation"}
             </button>
           ) : null}
+          {isPast && booking.status !== "cancelled" ? (
+            <button
+              type="button"
+              onClick={() => setReviewOpen(true)}
+              className="h-12 rounded-lg px-5 font-semibold border border-text-primary ml-auto"
+            >
+              Leave a review
+            </button>
+          ) : null}
         </div>
       </div>
+      <ReviewModal 
+        open={reviewOpen} 
+        onClose={() => setReviewOpen(false)} 
+        bookingId={booking.id} 
+        onSuccess={() => setReviewOpen(false)} 
+      />
     </article>
   );
 }

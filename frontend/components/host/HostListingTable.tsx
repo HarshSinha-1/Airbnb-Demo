@@ -1,6 +1,7 @@
 "use client";
 
-import { formatMoney } from "@/lib/format";
+import { formatRating } from "@/lib/format";
+import { formatPrice } from "@/lib/formatPrice";
 import type { HostListingCard } from "@/lib/types";
 import Link from "next/link";
 
@@ -41,7 +42,7 @@ export function HostListingTable({
           </div>
           <div>Listed</div>
           <div>{listing.booking_count}</div>
-          <div>{formatMoney(listing.price_per_night)}</div>
+          <div>{formatPrice(listing.price_per_night, listing.currency)}</div>
           <div className="flex items-center gap-3 text-sm font-semibold">
             <Link href={`/host/listings/${listing.id}/edit`} className="underline">
               Edit

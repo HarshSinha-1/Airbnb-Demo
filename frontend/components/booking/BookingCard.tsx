@@ -5,7 +5,8 @@ import { GuestPicker } from "@/components/booking/GuestPicker";
 import { PriceBreakdown } from "@/components/booking/PriceBreakdown";
 import { Button } from "@/components/ui/Button";
 import { StarIcon } from "@/components/ui/Icons";
-import { formatDateRange, formatMoney, formatRating } from "@/lib/format";
+import { formatDateRange, formatRating } from "@/lib/format";
+import { formatPrice } from "@/lib/formatPrice";
 import type { AvailabilityRange, ListingDetail, PriceQuote } from "@/lib/types";
 import { useEffect, useRef, useState } from "react";
 
@@ -59,7 +60,7 @@ export function BookingCard({
     <aside className="sticky top-[120px] w-full md:w-[372px] shrink-0 rounded-xl border border-border-default bg-white p-6 shadow-lift">
       <div className="mb-6 flex items-end justify-between">
         <p className="text-[22px] font-semibold">
-          {formatMoney(listing.price_per_night)}{" "}
+          {formatPrice(listing.price_per_night, listing.currency)}{" "}
           <span className="text-base font-normal">night</span>
         </p>
         {rating ? (

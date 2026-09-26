@@ -179,9 +179,20 @@ The frontend will run on `http://localhost:3000`.
 
 ---
 
-## ✨ Features Implemented
-- **Home/Explore**: Dynamic listing grid with location, date, and guest search filters.
+✨ **Features Implemented**
+- **Home/Explore**: City-grouped horizontal-scrolling carousels at the top (grouped by city, up to 7 cards, left/right chevron nav, "Guest favourite" badge). The full search/filter grid sits below, unchanged.
 - **Listing Details**: Asymmetric photo galleries, full amenity lists, and real-time blocked date calendars.
 - **Booking Flow**: Safe overlap validation, checkout UI, and dedicated "My Trips" dashboard.
-- **Host Dashboard**: Full CRUD capabilities for owned listings. 
-- **UX Polish**: Animated modals, toaster notifications, and responsive mobile-first layouts mimicking Airbnb's signature design. 
+- **Host Dashboard**: Full CRUD capabilities for owned listings.
+- **UX Polish**: Animated modals, toaster notifications, and responsive mobile-first layouts mimicking Airbnb's signature design.
+
+## 🆕 Recent Additions
+
+| Feature | Details |
+|---------|---------|
+| **Multi-currency support** | `currency` column added to listings & bookings (ISO 4217). Frontend uses `Intl.NumberFormat` — no hardcoded `$` symbols. `₹` shown for INR listings, `$` for USD. |
+| **Indian region seed data** | ~15 new INR-denominated listings across **Lucknow**, **Gurgaon**, and **Goa** (₹6,000–₹20,000/night). Seed is deterministic (`random.seed(42)`) and idempotent. |
+| **City-grouped carousels** | Home page now opens with per-city horizontal-scrolling carousels derived client-side from `GET /api/listings`. No new backend endpoint needed. |
+| **Post-stay reviews** | "Leave a review" button appears on My Trips for any booking whose check-out has passed. Opens a star + comment modal; duplicate attempts show a friendly message, not a raw 409 error. |
+| **9-point audit** | `backend/tests/test_audit.py` — all 9 checks (schemas, seed idempotency, availability, price-quote, ownership 403, cancellation-frees-dates, pagination/filters, review constraints, wishlist constraints) pass against the updated schema. |
+

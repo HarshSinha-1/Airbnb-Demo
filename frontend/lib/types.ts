@@ -28,6 +28,7 @@ export type ListingCard = {
   city: string;
   country: string;
   price_per_night: number;
+  currency: string;
   cover_image: string | null;
   average_rating: number | null;
   review_count: number;
@@ -72,6 +73,7 @@ export type ListingDetail = {
   lat: number;
   lng: number;
   price_per_night: number;
+  currency: string;
   cleaning_fee: number;
   max_guests: number;
   bedrooms: number;
@@ -111,6 +113,7 @@ export type AvailabilityRange = {
 
 export type PriceQuote = {
   nightly_price: number;
+  currency: string;
   nights: number;
   subtotal: number;
   cleaning_fee: number;
@@ -133,6 +136,7 @@ export type Booking = {
   check_out: string;
   guests: number;
   nightly_price: number;
+  currency: string;
   nights: number;
   cleaning_fee: number;
   service_fee: number;
@@ -178,6 +182,7 @@ export type ListingCreate = {
   lat?: number;
   lng?: number;
   price_per_night: number;
+  currency?: string;
   cleaning_fee?: number;
   max_guests?: number;
   bedrooms?: number;
@@ -197,6 +202,7 @@ export type ListingUpdate = {
   lat?: number | null;
   lng?: number | null;
   price_per_night?: number | null;
+  currency?: string | null;
   cleaning_fee?: number | null;
   max_guests?: number | null;
   bedrooms?: number | null;

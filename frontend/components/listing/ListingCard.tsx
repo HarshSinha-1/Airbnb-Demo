@@ -2,7 +2,8 @@
 
 import { StarIcon } from "@/components/ui/Icons";
 import { WishlistButton } from "@/components/listing/WishlistButton";
-import { formatMoney, formatRating, isGuestFavourite } from "@/lib/format";
+import { formatRating, isGuestFavourite } from "@/lib/format";
+import { formatPrice } from "@/lib/formatPrice";
 import type { ListingCard as ListingCardType } from "@/lib/types";
 import Link from "next/link";
 
@@ -52,7 +53,7 @@ export function ListingCard({
           {subtitle ?? listing.property_type.replaceAll("_", " ")}
         </p>
         <p className="mt-1 text-[15px] leading-5">
-          <span className="font-semibold">{formatMoney(listing.price_per_night)}</span>
+          <span className="font-semibold">{formatPrice(listing.price_per_night, listing.currency)}</span>
           <span className="font-normal"> night</span>
         </p>
       </div>

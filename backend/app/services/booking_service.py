@@ -116,6 +116,7 @@ def create_booking(
         cleaning_fee=price["cleaning_fee"],
         service_fee=price["service_fee"],
         total_price=price["total"],
+        currency=listing.currency,
         status="confirmed",
     )
     db.add(booking)
@@ -184,6 +185,7 @@ def get_my_bookings(db: Session, guest_id: int) -> list[dict]:
             "cleaning_fee": b.cleaning_fee,
             "service_fee": b.service_fee,
             "total_price": b.total_price,
+            "currency": listing.currency if listing else "USD",
             "status": b.status,
             "created_at": b.created_at,
             "listing_title": listing.title if listing else None,

@@ -10,7 +10,8 @@ import { Skeleton } from "@/components/ui/Skeleton";
 import { useCurrentUser } from "@/context/UserContext";
 import { useToast } from "@/context/ToastContext";
 import { api } from "@/lib/api";
-import { formatMoney, parseISODate } from "@/lib/format";
+import { parseISODate } from "@/lib/format";
+import { formatPrice } from "@/lib/formatPrice";
 import { ApiError, type Booking, type HostListingCard } from "@/lib/types";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -152,7 +153,7 @@ export default function HostDashboardPage() {
           <div className="mt-10 grid grid-cols-3 gap-4">
             <Stat label="Active listings" value={String(listings.length)} />
             <Stat label="Upcoming reservations" value={String(upcoming.length)} />
-            <Stat label="Upcoming earnings" value={formatMoney(earnings, true)} />
+            <Stat label="Upcoming earnings" value={formatPrice(earnings, upcoming[0]?.currency ?? "USD", true)} />
           </div>
 
           <h2 className="mb-4 mt-16 text-[22px] font-semibold">Your listings</h2>

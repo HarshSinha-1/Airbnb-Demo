@@ -267,7 +267,7 @@ export function ListingForm({
         <div>
           <h2 className="mb-6 text-[22px] font-semibold">Set your nightly price</h2>
           <label className="text-sm font-semibold">
-            Nightly price (USD)
+            Nightly price
             <input
               type="number"
               min={1}

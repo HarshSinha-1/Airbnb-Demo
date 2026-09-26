@@ -25,6 +25,7 @@ class PriceBreakdown(BaseModel):
     cleaning_fee: float
     service_fee: float
     total: float
+    currency: str = "USD"
 
 
 class BookingOut(BaseModel):
@@ -39,6 +40,7 @@ class BookingOut(BaseModel):
     cleaning_fee: float
     service_fee: float
     total_price: float
+    currency: str = "USD"
     status: str
     created_at: datetime
     # Nested info for display

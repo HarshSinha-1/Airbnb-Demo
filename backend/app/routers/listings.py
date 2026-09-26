@@ -109,6 +109,7 @@ def get_price_quote(
         check_in=check_in,
         check_out=check_out,
     )
+    price["currency"] = listing.currency
     return {"data": price, "error": None}
 
 

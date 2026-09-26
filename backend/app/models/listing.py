@@ -62,6 +62,7 @@ class Listing(Base):
     lng: Mapped[float] = mapped_column(Float, nullable=False, default=0.0)
     price_per_night: Mapped[float] = mapped_column(Float, nullable=False)
     cleaning_fee: Mapped[float] = mapped_column(Float, nullable=False, default=0.0)
+    currency: Mapped[str] = mapped_column(String(3), nullable=False, default="USD")
     max_guests: Mapped[int] = mapped_column(Integer, nullable=False, default=2)
     bedrooms: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
     beds: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
