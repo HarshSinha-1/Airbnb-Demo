@@ -23,7 +23,7 @@ export function UserSwitcher() {
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="flex h-12 w-[86px] items-center justify-between rounded-full border border-border-default bg-white px-3 transition-shadow duration-150 hover:shadow-float"
+        className="flex h-12 w-[86px] items-center justify-between rounded-full border border-border-default bg-surface-raised text-text-primary px-3 transition-shadow duration-150 hover:shadow-float"
         aria-label="Account menu"
       >
         <MenuIcon />
@@ -41,7 +41,7 @@ export function UserSwitcher() {
         )}
       </button>
       {open && (
-        <div className="absolute right-0 top-14 z-50 w-[240px] overflow-hidden rounded-xl bg-white py-2 shadow-lift">
+        <div className="absolute right-0 top-14 z-50 w-[240px] overflow-hidden rounded-xl bg-surface-raised border border-border-soft py-2 shadow-lift">
           {currentUser ? (
             <>
               <Link href="/trips" className="block px-4 py-3 text-sm font-semibold hover:bg-surface-soft" onClick={() => setOpen(false)}>

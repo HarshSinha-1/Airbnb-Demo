@@ -31,6 +31,7 @@ All core pages and features have been implemented based on the requirements:
 - **Multi-currency price display**: All price-rendering spots (listing cards, detail page, price breakdown, checkout) use `lib/formatPrice.ts` with `Intl.NumberFormat` to show `₹` for INR listings and `$` for USD listings — no hardcoded symbols.
 - **City-grouped carousels on the home page**: The top of the home page shows horizontal-scrolling carousel rows grouped by city (e.g. "Popular homes in Lucknow"), with left/right chevron nav and a "Guest favourite" badge on highly-rated listings. Fully additive — the existing search/filter grid is unchanged below.
 - **Leave a review after a completed stay**: On My Trips, any booking whose check-out date has passed shows a "Leave a review" button. Clicking it opens a star-rating + comment modal that posts to `POST /api/reviews`. Duplicate-review attempts show a friendly message ("You've already reviewed this stay") instead of a raw error.
+- **Token-based Dark Mode**: Added system-aware theme toggle (sun/moon icon) in navbar with `localStorage` persistence and inline anti-FOUC script. Utilizes CSS custom property tokens across the codebase ensuring seamless light/dark mode parity for cards, modals, form inputs, availability calendar, toasts, badges, and popovers while preserving brand red `#ff385c`.
 
 ## Next Steps / Left to Build
 

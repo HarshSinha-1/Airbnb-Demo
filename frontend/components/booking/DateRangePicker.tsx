@@ -80,7 +80,7 @@ export function DateRangePicker({
   };
 
   return (
-    <div className="w-[min(820px,100%)] rounded-2xl bg-white p-6">
+    <div className="w-[min(820px,100%)] rounded-2xl bg-surface-raised text-text-primary p-6">
       <div className="mb-4 flex items-center justify-between">
         <button
           type="button"
@@ -170,8 +170,8 @@ function MonthGrid({
             >
               <span
                 className={`flex h-10 w-10 items-center justify-center rounded-full ${
-                  start || end ? "bg-text-primary text-white" : "hover:border hover:border-text-primary"
-                } ${blockedDay ? "text-border-strong line-through" : ""}`}
+                  start || end ? "bg-text-primary text-bg font-semibold" : "hover:border hover:border-text-primary"
+                } ${blockedDay ? "text-text-disabled line-through opacity-40" : ""}`}
               >
                 {n}
               </span>

@@ -36,13 +36,13 @@ export function Modal({
     <div className="fixed inset-0 z-[70] flex items-center justify-center p-8">
       <button
         aria-label="Close dialog"
-        className="absolute inset-0 bg-[rgba(0,0,0,0.45)]"
+        className="absolute inset-0 bg-[var(--overlay)]"
         onClick={onClose}
       />
       <div
         role="dialog"
         aria-modal="true"
-        className={`relative flex max-h-[80vh] w-full ${width} flex-col overflow-hidden rounded-[20px] bg-white shadow-lift`}
+        className={`relative flex max-h-[80vh] w-full ${width} flex-col overflow-hidden rounded-[20px] bg-surface-raised shadow-lift`}
       >
         <div className="relative flex h-16 shrink-0 items-center justify-center border-b border-border-soft">
           <button

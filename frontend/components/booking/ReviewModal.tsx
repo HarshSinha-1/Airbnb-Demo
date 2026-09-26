@@ -84,7 +84,7 @@ export function ReviewModal({
         <div>
           <label className="block text-sm font-semibold mb-2">Comment</label>
           <textarea
-            className="w-full rounded-lg border border-border-strong p-3 min-h-[120px]"
+            className="w-full rounded-lg border border-border-strong bg-surface-raised text-text-primary p-3 min-h-[120px]"
             placeholder="How was your stay?"
             value={comment}
             onChange={(e) => setComment(e.target.value)}

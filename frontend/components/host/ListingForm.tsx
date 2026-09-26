@@ -184,7 +184,7 @@ export function ListingForm({
             <textarea
               value={values.description}
               onChange={(e) => set("description", e.target.value)}
-              className="mt-2 min-h-[180px] w-full rounded-lg border border-border-strong p-4 text-base font-normal"
+              className="mt-2 min-h-[180px] w-full rounded-lg border border-border-strong bg-surface-raised text-text-primary p-4 text-base font-normal"
             />
             <span className="mt-1 block text-right font-normal text-text-secondary">{values.description.length} characters</span>
           </label>
@@ -203,7 +203,7 @@ export function ListingForm({
                     )
                   }
                   className={`h-[88px] rounded-xl border text-sm font-medium ${
-                    on ? "border-2 border-text-primary" : "border-border-default"
+                    on ? "border-2 border-text-primary bg-surface-raised" : "border-border-default bg-surface-raised"
                   }`}
                 >
                   {a.name}
@@ -225,7 +225,7 @@ export function ListingForm({
                 value={photoUrl}
                 onChange={(e) => setPhotoUrl(e.target.value)}
                 placeholder="https://…"
-                className="h-12 flex-1 rounded-lg border border-border-strong px-3"
+                className="h-12 flex-1 rounded-lg border border-border-strong bg-surface-raised text-text-primary px-3"
               />
               <Button
                 type="button"
@@ -246,13 +246,13 @@ export function ListingForm({
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={url} alt="" className="h-40 w-full rounded-lg object-cover" />
                 {i === 0 ? (
-                  <span className="absolute left-2 top-2 rounded-full bg-white px-2 py-1 text-xs font-semibold">
+                  <span className="absolute left-2 top-2 rounded-full bg-surface-raised text-text-primary border border-border-soft px-2 py-1 text-xs font-semibold">
                     Cover photo
                   </span>
                 ) : null}
                 <button
                   type="button"
-                  className="absolute right-2 top-2 rounded-full bg-white px-2 py-1 text-xs"
+                  className="absolute right-2 top-2 rounded-full bg-surface-raised text-text-primary border border-border-soft px-2 py-1 text-xs"
                   onClick={() => set("image_urls", (values.image_urls ?? []).filter((_, idx) => idx !== i))}
                 >
                   Remove
@@ -273,7 +273,7 @@ export function ListingForm({
               min={1}
               value={values.price_per_night}
               onChange={(e) => set("price_per_night", Number(e.target.value))}
-              className="mt-2 h-20 w-full rounded-lg border border-border-strong px-4 text-4xl"
+              className="mt-2 h-20 w-full rounded-lg border border-border-strong bg-surface-raised text-text-primary px-4 text-4xl"
             />
           </label>
           <label className="mt-6 block text-sm font-semibold">
@@ -283,7 +283,7 @@ export function ListingForm({
               min={0}
               value={values.cleaning_fee}
               onChange={(e) => set("cleaning_fee", Number(e.target.value))}
-              className="mt-2 h-14 w-full rounded-lg border border-border-strong px-4 text-base font-normal"
+              className="mt-2 h-14 w-full rounded-lg border border-border-strong bg-surface-raised text-text-primary px-4 text-base font-normal"
             />
           </label>
           <p className="mt-4 text-sm text-text-secondary">Service fee is calculated by the backend when guests book.</p>
@@ -292,7 +292,7 @@ export function ListingForm({
 
       {error ? <p className="mt-6 text-error">{error}</p> : null}
 
-      <div className="fixed bottom-0 left-0 right-0 border-t border-border-soft bg-white">
+      <div className="fixed bottom-0 left-0 right-0 border-t border-border-soft bg-bg">
         <div className="mx-auto flex max-w-[760px] items-center justify-between py-4">
           <button
             type="button"
@@ -339,7 +339,7 @@ function Field({
       <input
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="mt-2 h-14 w-full rounded-lg border border-border-strong px-4 text-base font-normal"
+        className="mt-2 h-14 w-full rounded-lg border border-border-strong bg-surface-raised text-text-primary px-4 text-base font-normal"
       />
     </label>
   );

@@ -3,6 +3,7 @@
 import { AirbnbLogo, GlobeIcon } from "@/components/ui/Icons";
 import { SearchBar } from "@/components/nav/SearchBar";
 import { UserSwitcher } from "@/components/nav/UserSwitcher";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -17,7 +18,7 @@ export function NavBar() {
   const showFullSearch = pathname === "/" || pathname === "/search" || pathname === "/experiences" || pathname === "/services";
 
   return (
-    <header className="sticky top-0 z-50 bg-white">
+    <header className="sticky top-0 z-50 bg-bg">
       <div className="page-gutter flex h-20 items-center justify-between border-b border-border-soft">
         <Link href="/" className="flex w-[280px] items-center gap-2 text-rausch" aria-label="Airbnb home">
           <AirbnbLogo className="h-8 w-8" />
@@ -44,13 +45,14 @@ export function NavBar() {
           <Link href="/host" className="rounded-full px-4 py-3 text-sm font-semibold hover:bg-surface-soft">
             Become a host
           </Link>
-          <button type="button" className="rounded-full p-3 hover:bg-surface-soft" aria-label="Language">
+          <button type="button" className="rounded-full p-3 text-text-primary hover:bg-surface-soft" aria-label="Language">
             <GlobeIcon />
           </button>
+          <ThemeToggle />
           <UserSwitcher />
         </div>
       </div>
-      <div className="border-b border-border-soft bg-white py-4">
+      <div className="border-b border-border-soft bg-bg py-4">
         <SearchBar compact={!showFullSearch} />
       </div>
     </header>

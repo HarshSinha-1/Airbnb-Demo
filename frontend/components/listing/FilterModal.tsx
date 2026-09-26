@@ -98,7 +98,7 @@ export function FilterModal({
               onChange={(e) =>
                 setDraft((d) => ({ ...d, min_price: e.target.value ? Number(e.target.value) : undefined }))
               }
-              className="mt-2 h-14 w-full rounded-lg border border-border-strong px-4 text-base font-normal"
+              className="mt-2 h-14 w-full rounded-lg border border-border-strong bg-surface-raised text-text-primary px-4 text-base font-normal"
             />
           </label>
           <label className="flex-1 text-xs font-semibold">
@@ -110,7 +110,7 @@ export function FilterModal({
               onChange={(e) =>
                 setDraft((d) => ({ ...d, max_price: e.target.value ? Number(e.target.value) : undefined }))
               }
-              className="mt-2 h-14 w-full rounded-lg border border-border-strong px-4 text-base font-normal"
+              className="mt-2 h-14 w-full rounded-lg border border-border-strong bg-surface-raised text-text-primary px-4 text-base font-normal"
             />
           </label>
         </div>
@@ -130,7 +130,7 @@ export function FilterModal({
                     amenities: on ? d.amenities.filter((id) => id !== a.id) : [...d.amenities, a.id],
                   }))
                 }
-                className={`h-14 rounded-xl border px-4 text-left text-sm font-medium ${
+                className={`h-14 rounded-xl border px-4 text-left text-sm font-medium bg-surface-raised ${
                   on ? "border-2 border-text-primary" : "border-border-default hover:border-text-primary"
                 }`}
               >
@@ -157,7 +157,7 @@ function TypeChip({
     <button
       type="button"
       onClick={onClick}
-      className={`h-10 rounded-full border px-4 text-sm ${
+      className={`h-10 rounded-full border px-4 text-sm bg-surface-raised ${
         active ? "border-text-primary font-semibold" : "border-border-default"
       }`}
     >

@@ -145,7 +145,7 @@ export default function CheckoutPage() {
               <input
                 value={nameOnCard}
                 onChange={(e) => setNameOnCard(e.target.value)}
-                className="mt-2 h-14 w-full rounded-lg border border-border-strong px-4 text-base font-normal focus:outline-none"
+                className="mt-2 h-14 w-full rounded-lg border border-border-strong bg-surface-raised text-text-primary px-4 text-base font-normal focus:outline-none"
               />
             </label>
             <Field label="Country/region" placeholder="India" />
@@ -168,7 +168,7 @@ export default function CheckoutPage() {
         ) : null}
       </div>
 
-      <aside className="sticky top-[120px] h-fit rounded-xl border border-border-default p-6 shadow-lift">
+      <aside className="sticky top-[120px] h-fit rounded-xl border border-border-default bg-surface-raised text-text-primary p-6 shadow-lift">
         <div className="flex gap-4">
           {cover ? (
             // eslint-disable-next-line @next/next/no-img-element
@@ -200,7 +200,7 @@ function Field({ label, placeholder }: { label: string; placeholder: string }) {
       {label}
       <input
         placeholder={placeholder}
-        className="mt-2 h-14 w-full rounded-lg border border-border-strong px-4 text-base font-normal placeholder:text-text-disabled focus:outline-none"
+        className="mt-2 h-14 w-full rounded-lg border border-border-strong bg-surface-raised text-text-primary px-4 text-base font-normal placeholder:text-text-disabled focus:outline-none"
       />
     </label>
   );

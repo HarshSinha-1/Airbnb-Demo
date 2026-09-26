@@ -31,7 +31,7 @@ export function ListingCard({
           <div className="h-full w-full bg-surface-raised" />
         )}
         {favourite ? (
-          <span className="absolute left-3 top-3 rounded-full bg-white px-3 py-1.5 text-xs font-semibold shadow-float">
+          <span className="absolute left-3 top-3 rounded-full bg-surface-raised text-text-primary border border-border-soft px-3 py-1.5 text-xs font-semibold shadow-float">
             Guest favourite
           </span>
         ) : null}

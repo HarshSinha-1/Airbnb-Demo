@@ -59,10 +59,10 @@ function CarouselRow({ city, listings }: { city: string; listings: ListingCardTy
           <svg className="h-4 w-4 opacity-0 transition-opacity group-hover:opacity-100" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
         </h2>
         <div className="flex gap-2">
-          <button onClick={() => scroll("left")} className="flex h-8 w-8 items-center justify-center rounded-full border border-border-default bg-white shadow-sm hover:shadow-md hover:scale-105 transition-all">
+          <button onClick={() => scroll("left")} className="flex h-8 w-8 items-center justify-center rounded-full border border-border-default bg-surface-raised text-text-primary shadow-sm hover:shadow-md hover:scale-105 transition-all">
             <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
           </button>
-          <button onClick={() => scroll("right")} className="flex h-8 w-8 items-center justify-center rounded-full border border-border-default bg-white shadow-sm hover:shadow-md hover:scale-105 transition-all">
+          <button onClick={() => scroll("right")} className="flex h-8 w-8 items-center justify-center rounded-full border border-border-default bg-surface-raised text-text-primary shadow-sm hover:shadow-md hover:scale-105 transition-all">
             <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
           </button>
         </div>

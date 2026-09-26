@@ -39,7 +39,7 @@ export function PhotoGallery({ images, title }: { images: ListingImage[]; title:
         <button
           type="button"
           onClick={() => setOpen(true)}
-          className="absolute bottom-4 right-4 h-10 rounded-lg border border-text-primary bg-white px-4 text-sm font-semibold"
+          className="absolute bottom-4 right-4 h-10 rounded-lg border border-text-primary bg-surface-raised text-text-primary px-4 text-sm font-semibold"
         >
           Show all photos
         </button>

@@ -6,10 +6,10 @@ const styles: Record<Variant, string> = {
   primary:
     "bg-rausch text-white hover:bg-rausch-hover active:bg-rausch-active disabled:bg-rausch-disabled",
   secondary:
-    "bg-white text-text-primary border border-text-primary hover:bg-surface-soft",
+    "bg-surface-raised text-text-primary border border-text-primary hover:bg-surface-soft",
   ghost:
-    "bg-white text-text-primary border border-border-default hover:border-text-primary",
-  black: "bg-text-primary text-white hover:bg-black",
+    "bg-surface-raised text-text-primary border border-border-default hover:border-text-primary",
+  black: "bg-text-primary text-bg hover:opacity-90",
   danger: "bg-error text-white hover:opacity-90",
   underline:
     "bg-transparent text-text-primary underline underline-offset-4 font-semibold hover:text-text-body",

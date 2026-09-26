@@ -34,8 +34,8 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
             key={toast.id}
             className={`pointer-events-auto rounded-xl px-4 py-3 text-sm font-medium shadow-float ${
               toast.kind === "error"
-                ? "bg-white text-error ring-1 ring-error/20"
-                : "bg-[#222222] text-white"
+                ? "bg-surface-raised text-error ring-1 ring-error/20 border border-error/30"
+                : "bg-text-primary text-bg"
             }`}
           >
             {toast.message}

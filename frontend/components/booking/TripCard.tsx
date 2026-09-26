@@ -19,7 +19,7 @@ export function TripCard({
   const [reviewOpen, setReviewOpen] = useState(false);
   const isPast = parseISODate(booking.check_out).getTime() < new Date().setHours(0, 0, 0, 0);
   return (
-    <article className="flex overflow-hidden rounded-xl border border-border-default">
+    <article className="flex overflow-hidden rounded-xl border border-border-default bg-surface-raised">
       {booking.listing_cover_image ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img src={booking.listing_cover_image} alt="" className="h-[260px] w-[380px] object-cover" />

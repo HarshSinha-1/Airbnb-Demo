@@ -8,8 +8,8 @@ export function Pill({
     <button
       className={`h-11 rounded-full border px-4 text-sm font-medium transition-colors duration-150 ${
         active
-          ? "border-text-primary bg-white text-text-primary"
-          : "border-border-default bg-white text-text-primary hover:border-text-primary"
+          ? "border-text-primary bg-surface-raised text-text-primary font-semibold"
+          : "border-border-default bg-surface-raised text-text-primary hover:border-text-primary"
       } ${className}`}
       {...props}
     >

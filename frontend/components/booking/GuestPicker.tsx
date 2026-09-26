@@ -70,7 +70,7 @@ export function GuestPicker({
   };
 
   return (
-    <div className="w-[400px] max-w-full rounded-2xl bg-white p-6">
+    <div className="w-[400px] max-w-full rounded-2xl bg-surface-raised text-text-primary p-6">
       <Row
         title="Adults"
         subtitle="Ages 13 or above"

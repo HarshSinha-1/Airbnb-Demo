@@ -29,11 +29,11 @@ export function ComingSoonBadge({
             {description}
           </p>
         )}
-        <div className="mt-4 inline-block rounded-full border border-border-strong bg-white px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-text-secondary">
+        <div className="mt-4 inline-block rounded-full border border-border-strong bg-surface-raised px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-text-secondary">
           Coming Soon
         </div>
       </div>
-      <div className="pointer-events-none absolute inset-0 -z-0 bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.4),transparent)] bg-[length:200%_100%] motion-safe:animate-shimmer opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+      <div className="pointer-events-none absolute inset-0 -z-0 bg-[linear-gradient(90deg,transparent,var(--border-strong),transparent)] bg-[length:200%_100%] motion-safe:animate-shimmer opacity-0 group-hover:opacity-40 transition-opacity duration-700" />
     </div>
   );
 }
