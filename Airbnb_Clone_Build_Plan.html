@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Airbnb Web App Clone — Architecture &amp; Build Plan</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --panel2:#1c2230; --border:#2d333b;
+    --txt:#c9d1d9; --muted:#8b949e; --accent:#ff5a5f; --accent2:#bc8cff;
+    --green:#3fb950; --amber:#d29922; --red:#f85149; --pink:#f778ba;
+    --cyan:#39c5cf; --orange:#ff9d4d; --code:#0b0f14;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+       background:var(--bg);color:var(--txt);line-height:1.6;font-size:15px}
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .layout{display:flex;min-height:100vh}
+  nav.side{width:300px;flex:0 0 300px;background:var(--panel);border-right:1px solid var(--border);
+           position:sticky;top:0;height:100vh;overflow-y:auto;padding:18px 0}
+  nav.side h1{font-size:15px;margin:0 18px 4px;color:#fff;letter-spacing:.3px}
+  nav.side .sub{font-size:11px;color:var(--muted);margin:0 18px 14px}
+  nav.side a{display:block;color:var(--muted);padding:5px 18px;font-size:13px;border-left:3px solid transparent}
+  nav.side a:hover{background:var(--panel2);color:var(--txt);text-decoration:none}
+  nav.side a.grp{color:#fff;font-weight:600;margin-top:12px;font-size:11px;text-transform:uppercase;letter-spacing:.8px;padding-bottom:2px}
+  main{flex:1;min-width:0;padding:40px 56px 120px;max-width:1180px;margin:0 auto}
+  header.hero{border-bottom:1px solid var(--border);padding-bottom:26px;margin-bottom:30px}
+  header.hero h1{font-size:32px;margin:0 0 8px;color:#fff;line-height:1.25}
+  header.hero p{color:var(--muted);margin:4px 0;font-size:14px}
+  .pills{margin-top:14px}
+  .pill{display:inline-block;background:var(--panel2);border:1px solid var(--border);border-radius:20px;
+        padding:3px 12px;font-size:12px;margin:3px 6px 3px 0;color:var(--txt)}
+  section{margin-bottom:54px;scroll-margin-top:20px}
+  h2{font-size:24px;color:#fff;border-bottom:2px solid var(--accent);padding-bottom:8px;margin-top:10px}
+  h3{font-size:19px;color:var(--accent2);margin-top:30px}
+  h4{font-size:16px;color:#fff;margin-top:22px}
+  p,li{font-size:14.5px}
+  code{background:var(--code);padding:2px 6px;border-radius:5px;font-family:"SFMono-Regular",Consolas,monospace;
+       font-size:12.8px;color:#e3b341;border:1px solid var(--border)}
+  pre{background:var(--code);border:1px solid var(--border);border-radius:8px;padding:16px;overflow:auto;font-size:12.8px}
+  pre code{background:none;border:none;padding:0;color:var(--txt)}
+  table{border-collapse:collapse;width:100%;margin:16px 0;font-size:13.5px;display:block;overflow-x:auto}
+  th,td{border:1px solid var(--border);padding:8px 11px;text-align:left;vertical-align:top}
+  th{background:var(--panel2);color:#fff;white-space:nowrap}
+  tr:nth-child(even){background:rgba(255,255,255,.02)}
+  .mermaid{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:20px;margin:18px 0;text-align:center}
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:18px 22px;margin:16px 0}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin:16px 0}
+  .stat{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center}
+  .stat .n{font-size:28px;font-weight:700;color:var(--accent)}
+  .stat .l{font-size:12px;color:var(--muted);margin-top:4px}
+  .tag{display:inline-block;border-radius:5px;padding:1px 8px;font-size:11px;font-weight:600;white-space:nowrap}
+  .t-fe{background:rgba(88,166,255,.15);color:#58a6ff;border:1px solid rgba(88,166,255,.4)}
+  .t-be{background:rgba(63,185,80,.15);color:var(--green);border:1px solid rgba(63,185,80,.4)}
+  .t-db{background:rgba(188,140,255,.15);color:var(--accent2);border:1px solid rgba(188,140,255,.4)}
+  .t-infra{background:rgba(57,197,207,.15);color:var(--cyan);border:1px solid rgba(57,197,207,.4)}
+  .t-mvp{background:rgba(248,81,73,.15);color:var(--red);border:1px solid rgba(248,81,73,.4)}
+  .t-bonus{background:rgba(210,153,34,.15);color:var(--amber);border:1px solid rgba(210,153,34,.4)}
+  .callout{border-left:4px solid var(--accent);background:var(--panel2);padding:12px 18px;border-radius:0 8px 8px 0;margin:16px 0}
+  .callout.warn{border-color:var(--amber)}
+  .callout.danger{border-color:var(--red)}
+  .callout.ok{border-color:var(--green)}
+  .callout b{color:#fff}
+  .filetree{font-family:monospace;font-size:13px;line-height:1.7;white-space:pre;color:var(--muted)}
+  hr{border:none;border-top:1px solid var(--border);margin:30px 0}
+  .legend span{margin-right:16px;font-size:12px}
+  .phase{border-left:4px solid var(--accent);position:relative}
+  .phase .num{position:absolute;top:-14px;left:18px;background:var(--accent);color:#0d1117;font-weight:700;
+              font-size:12px;padding:2px 10px;border-radius:10px}
+  input[type=checkbox]{margin-right:6px}
+  footer{border-top:1px solid var(--border);padding-top:20px;color:var(--muted);font-size:12px}
+  ::-webkit-scrollbar{width:10px;height:10px}
+  ::-webkit-scrollbar-thumb{background:#30363d;border-radius:5px}
+  ::-webkit-scrollbar-track{background:var(--panel)}
+</style>
+</head>
+<body>
+<div class="layout">
+<nav class="side">
+  <h1>Airbnb Web App Clone</h1>
+  <div class="sub">Architecture &amp; Build Plan · SDE Fullstack Assignment</div>
+  <a class="grp">Overview</a>
+  <a href="#recap">Requirements Recap</a>
+  <a href="#scope">Assumptions &amp; Scope</a>
+  <a class="grp">Architecture</a>
+  <a href="#architecture">System Architecture</a>
+  <a href="#stack">Tech Stack</a>
+  <a href="#repo">Repository Structure</a>
+  <a class="grp">Data Layer</a>
+  <a href="#schema">Database Schema (ERD)</a>
+  <a href="#seed">Seed Data Plan</a>
+  <a class="grp">API Design</a>
+  <a href="#api">API Reference</a>
+  <a href="#booking-logic">Booking &amp; Availability Logic</a>
+  <a class="grp">Frontend</a>
+  <a href="#routes">Route Map</a>
+  <a href="#components">Page &amp; Component Breakdown</a>
+  <a href="#ui-fidelity">UI/UX Fidelity Checklist</a>
+  <a class="grp">Build Plan</a>
+  <a href="#phases">Step-by-Step Phases</a>
+  <a class="grp">Delivery</a>
+  <a href="#readme">README Checklist</a>
+  <a href="#evaluation">Evaluation Mapping</a>
+</nav>
+
+<main>
+<header class="hero">
+  <h1>Airbnb Web App Clone — Architecture &amp; Build Plan</h1>
+  <p>A complete, agent-followable implementation plan for the SDE Fullstack Assignment</p>
+  <p style="margin-top:10px">This document is the single source of truth for building the project: system
+     architecture, full database schema, complete API contract, frontend route/component map, and an ordered,
+     dependency-driven build plan a coding agent (or you) can execute phase by phase. Every requirement from
+     the assignment brief is mapped to a concrete deliverable below — nothing in the brief is left unaddressed.</p>
+  <div class="pills">
+    <span class="pill" style="border-color:#58a6ff">Next.js (TypeScript)</span>
+    <span class="pill" style="border-color:var(--green)">FastAPI</span>
+    <span class="pill" style="border-color:var(--accent2)">SQLite</span>
+    <span class="pill" style="border-color:var(--cyan)">Vercel + Render</span>
+  </div>
+  <div class="callout"><b>How to use this doc.</b> Read top to bottom once, then work through
+    <a href="#phases">Step-by-Step Phases</a> in order — each phase lists exactly what to build, which files
+    to touch, and what "done" looks like, so an AI coding agent can be pointed at one phase at a time without
+    losing context.</div>
+</header>
+
+<!-- =================== RECAP =================== -->
+<section id="recap">
+<h2>Requirements Recap</h2>
+<p>Straight from the brief — kept here so every later section can be traced back to a specific requirement.</p>
+<div class="grid">
+  <div class="stat"><div class="n">4</div><div class="l">core feature areas (Home/Search, Detail, Booking, Host CRUD)</div></div>
+  <div class="stat"><div class="n">2</div><div class="l">roles — guest &amp; host (mocked auth)</div></div>
+  <div class="stat"><div class="n">0</div><div class="l">real external services required (all mockable)</div></div>
+  <div class="stat"><div class="n">~24h</div><div class="l">estimated effort</div></div>
+</div>
+<table>
+<thead><tr><th>Area</th><th>Must-have</th></tr></thead>
+<tbody>
+<tr><td>Home &amp; Search</td><td>Listing grid, search bar (location + dates + guests), category/filter row, pagination or infinite scroll</td></tr>
+<tr><td>Listing Detail</td><td>Photo gallery, description/amenities/host info, availability calendar, price breakdown, reviews</td></tr>
+<tr><td>Booking Flow</td><td>Date + guest selection with overlap validation, booking summary, mocked checkout, "My Trips", persisted bookings that block dates</td></tr>
+<tr><td>Host Experience</td><td>Full CRUD on listings, host dashboard of owned listings + their bookings, persisted data</td></tr>
+<tr><td>Airbnb Feel</td><td>Navigation/layout, cards/galleries/date pickers/modals, filters, toasts, simple wishlist</td></tr>
+<tr><td>Mocked/placeholder</td><td>Payments, messaging, live map pins, identity verification, real auth (guest-vs-host notion still required)</td></tr>
+<tr><td>Deliverables</td><td>Public GitHub repo (<code>frontend/</code> + <code>backend/</code>), README (setup, architecture, schema, API), hosted demo link</td></tr>
+</tbody>
+</table>
+</section>
+
+<!-- =================== SCOPE =================== -->
+<section id="scope">
+<h2>Assumptions &amp; Scope Decisions</h2>
+<p>The brief deliberately leaves some things open ("design your own schema", "auth may be simplified"). These
+are the concrete decisions this plan makes, stated explicitly so they can go straight into the README's
+"Assumptions" section.</p>
+<div class="grid">
+  <div class="card">
+    <h4>Auth</h4>
+    <p>Simplified/mocked: a lightweight session (signed cookie or JWT) created on a "Continue as guest / host"
+    action, no password or email verification. A <code>role</code> field on the user determines whether the
+    Host Dashboard nav item appears. Users can switch role in a dev-only account switcher for demo purposes.</p>
+  </div>
+  <div class="card">
+    <h4>Payments</h4>
+    <p>Fully mocked. Checkout step shows a card-form UI (no real validation beyond format), a 1–2s fake
+    "processing" state, then a confirmation screen. No payment provider is integrated.</p>
+  </div>
+  <div class="card">
+    <h4>Media</h4>
+    <p>Listing photos are stored as URLs (either seeded stock photo URLs or user-pasted URLs on create/edit).
+    No cloud upload pipeline in the MVP — "image upload to cloud storage" is listed as a bonus item only.</p>
+  </div>
+  <div class="card">
+    <h4>Map</h4>
+    <p>Static approach for MVP: a location text + a static map image or embed (e.g. a non-interactive map
+    tile) on the listing detail page. Interactive pins (Leaflet/Mapbox) are a bonus, not required for core
+    functionality.</p>
+  </div>
+  <div class="card">
+    <h4>Messaging &amp; Verification</h4>
+    <p>Both are explicit "Coming Soon" placeholders — a disabled button/tab is sufficient, no backend needed.</p>
+  </div>
+  <div class="card">
+    <h4>Database</h4>
+    <p>SQLite as specified, accessed via an ORM (SQLAlchemy if FastAPI) so the schema is portable to Postgres
+    later without a rewrite.</p>
+  </div>
+</div>
+</section>
+
+<!-- =================== ARCHITECTURE =================== -->
+<section id="architecture">
+<h2>System Architecture</h2>
+<div class="mermaid">
+flowchart TB
+  subgraph CLIENT["Frontend — Next.js (TypeScript)"]
+    HOME["/ Explore page"]
+    SEARCH["/search results"]
+    DETAIL["/listing/[id]"]
+    TRIPS["/trips (My Trips)"]
+    HOSTDASH["/host dashboard"]
+    HOSTFORM["/host/listings/new · edit"]
+    WISH["/wishlist"]
+  end
+  subgraph API["Backend — FastAPI"]
+    AUTHR["/api/auth/*"]
+    LISTR["/api/listings/*"]
+    BOOKR["/api/bookings/*"]
+    REVR["/api/reviews/*"]
+    WISHR["/api/wishlist/*"]
+  end
+  subgraph SVC["Service layer"]
+    LISTSVC["ListingService<br/>(search, filter, CRUD)"]
+    BOOKSVC["BookingService<br/>(availability check, create)"]
+    AUTHSVC["AuthService<br/>(mock session, role)"]
+  end
+  DB[("SQLite<br/>via SQLAlchemy ORM")]
+  SEED["seed.py<br/>(sample hosts, listings, bookings)"]
+
+  HOME --> LISTR
+  SEARCH --> LISTR
+  DETAIL --> LISTR
+  DETAIL --> REVR
+  TRIPS --> BOOKR
+  HOSTDASH --> LISTR
+  HOSTDASH --> BOOKR
+  HOSTFORM --> LISTR
+  WISH --> WISHR
+  CLIENT -. session cookie/JWT .-> AUTHR
+
+  AUTHR --> AUTHSVC
+  LISTR --> LISTSVC
+  BOOKR --> BOOKSVC
+  REVR --> LISTSVC
+  WISHR --> LISTSVC
+
+  LISTSVC --> DB
+  BOOKSVC --> DB
+  AUTHSVC --> DB
+  SEED --> DB
+
+  style AUTHR stroke:#ff5a5f,stroke-width:2px
+  style LISTR stroke:#3fb950,stroke-width:2px
+  style BOOKR stroke:#bc8cff,stroke-width:2px
+  style DB stroke:#39c5cf,stroke-width:2px
+</div>
+<p>A standard 3-tier architecture: Next.js frontend calls a FastAPI REST backend, which delegates to a thin
+service layer, which reads/writes SQLite through an ORM. No message queue or external services are needed —
+the brief explicitly allows everything to be mocked, so keeping this simple maximizes time spent on the parts
+that are actually evaluated (functionality, UI/UX, schema, API design, code quality).</p>
+</section>
+
+<!-- =================== STACK =================== -->
+<section id="stack">
+<h2>Tech Stack</h2>
+<div class="grid">
+  <div class="card">
+    <h4><span class="tag t-fe">Frontend</span></h4>
+    <p>Next.js 14 (App Router) + TypeScript · Tailwind CSS for Airbnb-style utility styling · a date-range
+    picker library (e.g. <code>react-day-picker</code>) · <code>react-hot-toast</code> or similar for
+    notifications · Headless UI or Radix for accessible modals/dropdowns.</p>
+  </div>
+  <div class="card">
+    <h4><span class="tag t-be">Backend</span></h4>
+    <p>FastAPI (Python 3.11+) · Pydantic models for request/response validation · SQLAlchemy ORM ·
+    Alembic (or a simple <code>init_db.py</code>) for schema creation · Uvicorn as the ASGI server.</p>
+  </div>
+  <div class="card">
+    <h4><span class="tag t-db">Database</span></h4>
+    <p>SQLite file-based DB for both dev and the hosted demo (simplest deployable option consistent with the
+    brief's instruction). Schema written to be ORM-portable to Postgres later.</p>
+  </div>
+  <div class="card">
+    <h4><span class="tag t-infra">Infra / Deployment</span></h4>
+    <p>Frontend → Vercel. Backend → Render or Railway (free tier), with the SQLite file persisted on a small
+    disk/volume or re-seeded on boot. CORS configured on FastAPI for the deployed frontend origin.</p>
+  </div>
+</div>
+</section>
+
+<!-- =================== REPO =================== -->
+<section id="repo">
+<h2>Repository Structure</h2>
+<div class="card">
+<div class="filetree">airbnb-clone/
+├── frontend/                     # Next.js (TypeScript) app
+│   ├── app/
+│   │   ├── page.tsx               # Home / Explore
+│   │   ├── search/page.tsx        # Search results
+│   │   ├── listing/[id]/page.tsx  # Listing detail
+│   │   ├── trips/page.tsx         # My Trips (guest)
+│   │   ├── wishlist/page.tsx      # Wishlist
+│   │   └── host/
+│   │       ├── page.tsx           # Host dashboard
+│   │       └── listings/
+│   │           ├── new/page.tsx
+│   │           └── [id]/edit/page.tsx
+│   ├── components/
+│   │   ├── listing-card.tsx
+│   │   ├── search-bar.tsx
+│   │   ├── filter-row.tsx
+│   │   ├── photo-gallery.tsx
+│   │   ├── date-range-picker.tsx
+│   │   ├── booking-summary.tsx
+│   │   ├── review-list.tsx
+│   │   └── nav-bar.tsx
+│   ├── lib/
+│   │   ├── api-client.ts          # typed fetch wrapper for backend
+│   │   └── types.ts               # shared TS types mirroring API schemas
+│   └── package.json
+│
+├── backend/                      # FastAPI app
+│   ├── app/
+│   │   ├── main.py                 # app entrypoint, router registration, CORS
+│   │   ├── models.py               # SQLAlchemy ORM models
+│   │   ├── schemas.py              # Pydantic request/response schemas
+│   │   ├── database.py             # engine/session setup
+│   │   ├── routers/
+│   │   │   ├── auth.py
+│   │   │   ├── listings.py
+│   │   │   ├── bookings.py
+│   │   │   ├── reviews.py
+│   │   │   └── wishlist.py
+│   │   ├── services/
+│   │   │   ├── listing_service.py
+│   │   │   ├── booking_service.py
+│   │   │   └── auth_service.py
+│   │   └── seed.py                 # seed script for demo data
+│   ├── requirements.txt
+│   └── airbnb.db                   # SQLite file (generated)
+│
+└── README.md                     # setup, architecture, schema, API overview
+</div>
+</div>
+</section>
+
+<!-- =================== SCHEMA =================== -->
+<section id="schema">
+<h2>Database Schema (ERD)</h2>
+<div class="mermaid">
+erDiagram
+  USERS ||--o{ LISTINGS : "hosts"
+  USERS ||--o{ BOOKINGS : "makes"
+  USERS ||--o{ REVIEWS : "writes"
+  USERS ||--o{ WISHLIST_ITEMS : "saves"
+  LISTINGS ||--o{ LISTING_PHOTOS : "has"
+  LISTINGS ||--o{ LISTING_AMENITIES : "has"
+  AMENITIES ||--o{ LISTING_AMENITIES : "used in"
+  LISTINGS ||--o{ BOOKINGS : "receives"
+  LISTINGS ||--o{ REVIEWS : "receives"
+  LISTINGS ||--o{ WISHLIST_ITEMS : "saved as"
+  BOOKINGS ||--o| REVIEWS : "may generate"
+
+  USERS {
+    int id PK
+    string name
+    string email
+    string role "guest | host"
+    string avatar_url
+    datetime created_at
+  }
+  LISTINGS {
+    int id PK
+    int host_id FK
+    string title
+    text description
+    string property_type "apartment|house|villa|..."
+    string city
+    string state
+    string country
+    float latitude
+    float longitude
+    int max_guests
+    int bedrooms
+    int beds
+    int bathrooms
+    float nightly_price
+    float cleaning_fee
+    float service_fee_pct
+    boolean is_active
+    datetime created_at
+  }
+  LISTING_PHOTOS {
+    int id PK
+    int listing_id FK
+    string url
+    int sort_order
+  }
+  AMENITIES {
+    int id PK
+    string name "wifi|kitchen|pool|..."
+    string icon
+  }
+  LISTING_AMENITIES {
+    int listing_id FK
+    int amenity_id FK
+  }
+  BOOKINGS {
+    int id PK
+    int listing_id FK
+    int guest_id FK
+    date check_in
+    date check_out
+    int guests_count
+    float total_price
+    string status "confirmed|cancelled"
+    datetime created_at
+  }
+  REVIEWS {
+    int id PK
+    int listing_id FK
+    int guest_id FK
+    int booking_id FK
+    int rating "1-5"
+    text comment
+    datetime created_at
+  }
+  WISHLIST_ITEMS {
+    int id PK
+    int user_id FK
+    int listing_id FK
+    datetime created_at
+  }
+</div>
+<h3>Design notes</h3>
+<div class="grid">
+  <div class="card">
+    <h4>Why a join table for amenities</h4>
+    <p><code>LISTING_AMENITIES</code> is many-to-many so amenities are a controlled, filterable vocabulary
+    (needed for the filter row) rather than a free-text field per listing.</p>
+  </div>
+  <div class="card">
+    <h4>Availability = derived, not stored</h4>
+    <p>No separate "availability" table — a date range is blocked if it overlaps any <code>BOOKINGS</code>
+    row with <code>status = 'confirmed'</code> for that listing. This avoids sync bugs between two sources
+    of truth.</p>
+  </div>
+  <div class="card">
+    <h4>Reviews tied to a booking</h4>
+    <p><code>booking_id</code> on <code>REVIEWS</code> enforces "only guests who actually stayed can review"
+    — matches the bonus requirement "leave a review after a completed stay" and is easy to relax later.</p>
+  </div>
+  <div class="card">
+    <h4>Price breakdown fields</h4>
+    <p><code>nightly_price</code>, <code>cleaning_fee</code>, <code>service_fee_pct</code> live on the listing
+    so the price breakdown on the detail page and the booking summary compute from the same source.</p>
+  </div>
+</div>
+</section>
+
+<!-- =================== SEED =================== -->
+<section id="seed">
+<h2>Seed Data Plan</h2>
+<p>The brief requires the app to be "immediately usable" — seed script (<code>backend/app/seed.py</code>)
+run once on first boot (or via a <code>make seed</code> / npm script) should create:</p>
+<ul>
+<li><b>5–8 host users</b>, each with a name, avatar, and a short bio.</li>
+<li><b>2–3 guest users</b> for demoing "My Trips" and reviews with pre-existing history.</li>
+<li><b>20–30 listings</b> spread across several cities, property types, and price points, each with
+3–6 photos (stock URLs), 4–8 amenities, and realistic descriptions — enough variety to make filters and
+search meaningfully return different results.</li>
+<li><b>A handful of existing bookings</b> (some in the past, some upcoming) per listing so the availability
+calendar shows real blocked dates and "My Trips" isn't empty on first load.</li>
+<li><b>A handful of reviews</b> tied to past bookings so the reviews section and any rating aggregation has
+real content.</li>
+</ul>
+</section>
+
+<!-- =================== API =================== -->
+<section id="api">
+<h2>API Reference</h2>
+<table>
+<thead><tr><th>Method</th><th>Path</th><th>Purpose</th><th>Auth</th></tr></thead>
+<tbody>
+<tr><td>POST</td><td><code>/api/auth/continue</code></td><td>Create a mock session as guest or host (or seeded demo user)</td><td>—</td></tr>
+<tr><td>GET</td><td><code>/api/auth/me</code></td><td>Current session user + role</td><td>Session</td></tr>
+<tr><td>POST</td><td><code>/api/auth/logout</code></td><td>Clear session</td><td>Session</td></tr>
+<tr><td>GET</td><td><code>/api/listings</code></td><td>List/search listings — query params: <code>location, check_in, check_out, guests, min_price, max_price, property_type, amenities[], page</code></td><td>—</td></tr>
+<tr><td>GET</td><td><code>/api/listings/{id}</code></td><td>Full listing detail (photos, amenities, host, reviews summary)</td><td>—</td></tr>
+<tr><td>GET</td><td><code>/api/listings/{id}/availability</code></td><td>Blocked date ranges for the calendar, derived from bookings</td><td>—</td></tr>
+<tr><td>POST</td><td><code>/api/listings</code></td><td>Create a listing (host only)</td><td>Session (host)</td></tr>
+<tr><td>PUT</td><td><code>/api/listings/{id}</code></td><td>Update a listing (owner only)</td><td>Session (host, owner)</td></tr>
+<tr><td>DELETE</td><td><code>/api/listings/{id}</code></td><td>Delete a listing (owner only)</td><td>Session (host, owner)</td></tr>
+<tr><td>GET</td><td><code>/api/host/listings</code></td><td>Listings owned by the current host, with booking counts</td><td>Session (host)</td></tr>
+<tr><td>GET</td><td><code>/api/host/bookings</code></td><td>All bookings across the host's listings</td><td>Session (host)</td></tr>
+<tr><td>POST</td><td><code>/api/bookings</code></td><td>Create a booking — validates no date overlap, computes total price</td><td>Session (guest)</td></tr>
+<tr><td>GET</td><td><code>/api/bookings/mine</code></td><td>Current guest's bookings ("My Trips")</td><td>Session (guest)</td></tr>
+<tr><td>DELETE</td><td><code>/api/bookings/{id}</code></td><td>Cancel a booking (frees the dates)</td><td>Session (guest, owner)</td></tr>
+<tr><td>GET</td><td><code>/api/listings/{id}/reviews</code></td><td>Reviews for a listing</td><td>—</td></tr>
+<tr><td>POST</td><td><code>/api/reviews</code></td><td>Create a review, tied to a completed booking</td><td>Session (guest)</td></tr>
+<tr><td>GET</td><td><code>/api/wishlist</code></td><td>Current user's saved listings</td><td>Session</td></tr>
+<tr><td>POST</td><td><code>/api/wishlist/{listing_id}</code></td><td>Add to wishlist</td><td>Session</td></tr>
+<tr><td>DELETE</td><td><code>/api/wishlist/{listing_id}</code></td><td>Remove from wishlist</td><td>Session</td></tr>
+</tbody>
+</table>
+<div class="callout warn"><b>Consistent envelope.</b> Every endpoint returns
+<code>{ data, error }</code> on the FastAPI side and the frontend's <code>api-client.ts</code> unwraps it once,
+so every component gets typed data or a thrown error — no per-page fetch boilerplate.</div>
+</section>
+
+<!-- =================== BOOKING LOGIC =================== -->
+<section id="booking-logic">
+<h2>Booking &amp; Availability Logic</h2>
+<div class="mermaid">
+sequenceDiagram
+  participant U as Guest (frontend)
+  participant API as POST /api/bookings
+  participant SVC as BookingService
+  participant DB as SQLite
+
+  U->>API: {listing_id, check_in, check_out, guests_count}
+  API->>SVC: validate(payload)
+  SVC->>DB: SELECT bookings WHERE listing_id=? AND status='confirmed' AND date ranges overlap
+  alt overlap found
+    DB-->>SVC: conflicting rows
+    SVC-->>API: 409 Conflict — dates unavailable
+    API-->>U: show "these dates were just booked" toast
+  else no overlap
+    DB-->>SVC: []
+    SVC->>SVC: total_price = nights * nightly_price + cleaning_fee + service_fee
+    SVC->>DB: INSERT booking (status='confirmed')
+    DB-->>SVC: booking row
+    SVC-->>API: 201 Created
+    API-->>U: booking confirmation screen
+  end
+</div>
+<p>The overlap check is the one piece of business logic that must be correct: two ranges
+<code>[check_in, check_out)</code> overlap if <code>new.check_in &lt; existing.check_out AND new.check_out &gt;
+existing.check_in</code>. This single SQL condition, run inside the same transaction as the insert, is what
+guarantees "no overlapping/unavailable dates" from the brief — do this server-side, never trust client-side
+validation alone.</p>
+</section>
+
+<!-- =================== ROUTES =================== -->
+<section id="routes">
+<h2>Frontend Route Map</h2>
+<table>
+<thead><tr><th>Route</th><th>Page</th><th>Access</th></tr></thead>
+<tbody>
+<tr><td><code>/</code></td><td>Home / Explore — listing grid, search bar, filter row</td><td>Public</td></tr>
+<tr><td><code>/search?location=&amp;checkIn=&amp;checkOut=&amp;guests=</code></td><td>Search results — same grid, filtered</td><td>Public</td></tr>
+<tr><td><code>/listing/[id]</code></td><td>Listing detail — gallery, calendar, price breakdown, reviews</td><td>Public</td></tr>
+<tr><td><code>/trips</code></td><td>My Trips — guest's bookings</td><td>Guest session</td></tr>
+<tr><td><code>/wishlist</code></td><td>Saved listings</td><td>Any session</td></tr>
+<tr><td><code>/host</code></td><td>Host dashboard — owned listings + their bookings</td><td>Host session</td></tr>
+<tr><td><code>/host/listings/new</code></td><td>Create listing form</td><td>Host session</td></tr>
+<tr><td><code>/host/listings/[id]/edit</code></td><td>Edit listing form</td><td>Host session, owner</td></tr>
+</tbody>
+</table>
+</section>
+
+<!-- =================== COMPONENTS =================== -->
+<section id="components">
+<h2>Page &amp; Component Breakdown</h2>
+<div class="grid">
+  <div class="card">
+    <h4>Home / Search (<code>/</code>, <code>/search</code>)</h4>
+    <p><code>&lt;NavBar/&gt;</code> → <code>&lt;SearchBar/&gt;</code> (location + <code>DateRangePicker</code> +
+    guest counter) → <code>&lt;FilterRow/&gt;</code> (price range, property type, amenities as pill toggles) →
+    <code>&lt;ListingGrid&gt;</code> of <code>&lt;ListingCard/&gt;</code> (photo carousel, title, location,
+    rating, price) → <code>&lt;Pagination/&gt;</code> or infinite-scroll sentinel.</p>
+  </div>
+  <div class="card">
+    <h4>Listing Detail (<code>/listing/[id]</code>)</h4>
+    <p><code>&lt;PhotoGallery/&gt;</code> (grid → lightbox modal) → title/host block → amenities list →
+    <code>&lt;AvailabilityCalendar/&gt;</code> (blocked dates greyed out) → sticky
+    <code>&lt;BookingSummary/&gt;</code> card (date picker + guest count + price breakdown + "Reserve" CTA)
+    → <code>&lt;ReviewList/&gt;</code>.</p>
+  </div>
+  <div class="card">
+    <h4>Booking Flow</h4>
+    <p>"Reserve" → <code>&lt;BookingConfirmModal/&gt;</code> (summary) → mocked
+    <code>&lt;CheckoutForm/&gt;</code> → <code>&lt;ConfirmationScreen/&gt;</code> → toast + redirect to
+    <code>/trips</code>.</p>
+  </div>
+  <div class="card">
+    <h4>Host Dashboard (<code>/host</code>)</h4>
+    <p><code>&lt;HostListingTable/&gt;</code> (edit/delete actions, booking count per listing) +
+    <code>&lt;HostBookingList/&gt;</code> (bookings across all owned listings). "New listing" CTA →
+    <code>&lt;ListingForm/&gt;</code> (shared by create and edit).</p>
+  </div>
+  <div class="card">
+    <h4>Shared</h4>
+    <p><code>&lt;NavBar/&gt;</code> (guest/host toggle, wishlist icon), <code>&lt;Toast/&gt;</code> provider,
+    <code>&lt;Modal/&gt;</code> primitive reused by gallery/booking/filters.</p>
+  </div>
+</div>
+</section>
+
+<!-- =================== UI FIDELITY =================== -->
+<section id="ui-fidelity">
+<h2>UI/UX Fidelity Checklist</h2>
+<p>The brief weighs visual similarity heavily ("should totally resemble Airbnb's design"). Concrete,
+checkable targets:</p>
+<ul>
+<li>☐ Rounded listing cards with a square/4:3 photo, heart icon top-right, title + location + rating +
+"$price / night" in the same visual hierarchy as Airbnb.</li>
+<li>☐ Sticky top nav with a centered rounded search pill (collapses to full search bar on scroll/click).</li>
+<li>☐ Category/filter row as horizontally scrollable icon pills below the nav.</li>
+<li>☐ Listing detail gallery as an asymmetric photo grid that opens a full-screen lightbox.</li>
+<li>☐ Booking card is sticky on desktop, becomes a bottom sheet / full-width CTA on mobile.</li>
+<li>☐ Consistent border-radius, spacing scale, and a red/pink accent color consistent with Airbnb's palette.</li>
+<li>☐ Toasts for booking success, listing saved/removed, form validation errors.</li>
+<li>☐ Empty states designed, not left blank (no bookings yet, no wishlist items yet, no search results).</li>
+</ul>
+</section>
+
+<!-- =================== PHASES =================== -->
+<section id="phases">
+<h2>Step-by-Step Build Phases</h2>
+<p>Ordered by dependency — each phase should be fully working (even if visually rough) before moving to the
+next, so the app is demoable at every stage. No calendar time is attached; work through them in order.</p>
+
+<div class="card phase"><span class="num">Phase 0</span>
+<h4>Project Scaffolding</h4>
+<ul>
+<li>Init <code>frontend/</code> (Next.js + TS + Tailwind) and <code>backend/</code> (FastAPI + SQLAlchemy)
+as siblings in one repo.</li>
+<li>Set up <code>database.py</code> (engine/session), CORS in <code>main.py</code>, and a health-check route.</li>
+<li>Set up <code>api-client.ts</code> on the frontend pointing at the backend base URL via an env var.</li>
+</ul>
+<p><b>Done when:</b> both dev servers run locally, frontend can hit <code>/health</code> and render the response.</p>
+</div>
+
+<div class="card phase"><span class="num">Phase 1</span>
+<h4>Database Schema &amp; Seed Data</h4>
+<ul>
+<li>Implement all ORM models from the <a href="#schema">ERD</a> in <code>models.py</code>.</li>
+<li>Write <code>seed.py</code> per the <a href="#seed">Seed Data Plan</a>; make it idempotent (safe to re-run).</li>
+</ul>
+<p><b>Done when:</b> running the seed script produces a populated <code>airbnb.db</code> inspectable with a
+SQLite browser, matching the ERD's relationships.</p>
+</div>
+
+<div class="card phase"><span class="num">Phase 2</span>
+<h4>Backend Core: Auth (mock) + Listings Read</h4>
+<ul>
+<li>Implement <code>/api/auth/*</code> mock session endpoints.</li>
+<li>Implement <code>GET /api/listings</code> with all query-param filters and pagination, and
+<code>GET /api/listings/{id}</code> with nested photos/amenities/host/review-summary.</li>
+</ul>
+<p><b>Done when:</b> every filter/search combination the frontend will need is testable via
+<code>/docs</code> (FastAPI's auto Swagger UI) and returns correct, seeded data.</p>
+</div>
+
+<div class="card phase"><span class="num">Phase 3</span>
+<h4>Backend Core: Bookings, Availability, Reviews, Wishlist, Host CRUD</h4>
+<ul>
+<li>Implement the overlap-safe booking creation from <a href="#booking-logic">Booking &amp; Availability Logic</a>.</li>
+<li>Implement <code>availability</code>, <code>reviews</code>, <code>wishlist</code>, and the full
+<code>POST/PUT/DELETE /api/listings</code> host-CRUD endpoints with ownership checks.</li>
+</ul>
+<p><b>Done when:</b> the entire API surface in <a href="#api">API Reference</a> is implemented and
+manually exercised via Swagger UI, including the "double-booking is rejected" case.</p>
+</div>
+
+<div class="card phase"><span class="num">Phase 4</span>
+<h4>Frontend: Home / Explore + Search</h4>
+<ul>
+<li>Build <code>&lt;ListingCard/&gt;</code>, <code>&lt;ListingGrid/&gt;</code>, <code>&lt;SearchBar/&gt;</code>,
+<code>&lt;FilterRow/&gt;</code>, pagination/infinite scroll, wired to <code>GET /api/listings</code>.</li>
+</ul>
+<p><b>Done when:</b> a user can land on <code>/</code>, see seeded listings, search by location/dates/guests,
+apply filters, and page through results — all against the real backend, matching the
+<a href="#ui-fidelity">UI/UX checklist</a> for this page.</p>
+</div>
+
+<div class="card phase"><span class="num">Phase 5</span>
+<h4>Frontend: Listing Detail Page</h4>
+<ul>
+<li>Build <code>&lt;PhotoGallery/&gt;</code>, amenities/description/host block, <code>&lt;AvailabilityCalendar/&gt;</code>
+(reads blocked ranges), price breakdown, <code>&lt;ReviewList/&gt;</code>.</li>
+</ul>
+<p><b>Done when:</b> navigating from a card opens a fully populated detail page with a calendar that
+correctly greys out seeded booked dates.</p>
+</div>
+
+<div class="card phase"><span class="num">Phase 6</span>
+<h4>Frontend: Booking Flow + My Trips + Wishlist</h4>
+<ul>
+<li>Wire the booking summary card's "Reserve" action through the confirm modal → mocked checkout →
+confirmation screen → <code>POST /api/bookings</code>.</li>
+<li>Build <code>/trips</code> against <code>GET /api/bookings/mine</code>, including a cancel action.</li>
+<li>Wire the wishlist heart icon on cards/detail page to the wishlist endpoints and build <code>/wishlist</code>.</li>
+</ul>
+<p><b>Done when:</b> a full guest journey — search → detail → book → see it in My Trips → the listing's
+calendar now shows those dates blocked — works end to end with no page requiring a refresh to reflect state.</p>
+</div>
+
+<div class="card phase"><span class="num">Phase 7</span>
+<h4>Frontend: Host Dashboard &amp; Listing CRUD</h4>
+<ul>
+<li>Build <code>/host</code> (owned listings table + bookings list), and the shared
+<code>&lt;ListingForm/&gt;</code> used by both <code>/host/listings/new</code> and
+<code>/host/listings/[id]/edit</code>, including delete with a confirm step.</li>
+</ul>
+<p><b>Done when:</b> a host can create a listing from scratch, see it appear on the public Home page, edit
+it, and delete it, with the dashboard's booking list reflecting any bookings guests make against it.</p>
+</div>
+
+<div class="card phase"><span class="num">Phase 8</span>
+<h4>Polish, Toasts, Empty States, Bonus Features</h4>
+<ul>
+<li>Pass over every page against the <a href="#ui-fidelity">UI/UX checklist</a>; add toasts and empty states
+everywhere they're missing.</li>
+<li>Optional, time-permitting, in this order of payoff: <span class="tag t-bonus">responsive design</span>,
+<span class="tag t-bonus">post-stay reviews</span>, <span class="tag t-bonus">interactive map pins</span>,
+<span class="tag t-bonus">superhost/rating badges</span>, <span class="tag t-bonus">dark mode</span>,
+<span class="tag t-bonus">cloud image upload</span>.</li>
+</ul>
+<p><b>Done when:</b> the app feels cohesive and Airbnb-like across every screen, not just the ones built first.</p>
+</div>
+
+<div class="card phase"><span class="num">Phase 9</span>
+<h4>Deployment &amp; README</h4>
+<ul>
+<li>Deploy <code>frontend/</code> to Vercel, <code>backend/</code> to Render/Railway; run the seed script on
+the deployed backend; confirm CORS and env vars point frontend → deployed backend URL.</li>
+<li>Write the README per the <a href="#readme">README Checklist</a>.</li>
+</ul>
+<p><b>Done when:</b> the hosted link works standalone (no local backend needed), is pre-seeded, and the repo
+is public with both <code>frontend/</code> and <code>backend/</code> present.</p>
+</div>
+</section>
+
+<!-- =================== README =================== -->
+<section id="readme">
+<h2>README Checklist</h2>
+<p>The brief explicitly grades the README. It must include, at minimum:</p>
+<ul>
+<li>☐ Project description + a couple of screenshots or a GIF of the core flow.</li>
+<li>☐ Tech stack used (this document's <a href="#stack">Tech Stack</a> section, trimmed to what was actually used).</li>
+<li>☐ Architecture overview — reuse the <a href="#architecture">System Architecture</a> Mermaid diagram, it
+renders natively on GitHub.</li>
+<li>☐ Database schema — reuse the <a href="#schema">ERD</a> Mermaid diagram.</li>
+<li>☐ API overview — a trimmed version of the <a href="#api">API Reference</a> table.</li>
+<li>☐ Setup instructions: clone → backend install/seed/run → frontend install/run → env vars needed.</li>
+<li>☐ Assumptions made (reuse <a href="#scope">Assumptions &amp; Scope</a>, condensed).</li>
+<li>☐ Hosted demo link and any demo login/role-switch instructions.</li>
+</ul>
+</section>
+
+<!-- =================== EVALUATION =================== -->
+<section id="evaluation">
+<h2>Evaluation Mapping</h2>
+<table>
+<thead><tr><th>Evaluation criteria</th><th>Where this plan addresses it</th></tr></thead>
+<tbody>
+<tr><td>Functionality</td><td>Phases 2–7 cover every must-have feature end to end, with explicit "done when" checks</td></tr>
+<tr><td>UI/UX</td><td><a href="#ui-fidelity">UI/UX Fidelity Checklist</a> + Phase 8 polish pass</td></tr>
+<tr><td>Database Design</td><td><a href="#schema">ERD</a> with explicit relationship and design-decision notes</td></tr>
+<tr><td>Backend / API Design</td><td><a href="#api">API Reference</a> with a consistent response envelope and a documented service layer</td></tr>
+<tr><td>Code Quality &amp; Modularity</td><td><a href="#repo">Repository Structure</a> separates routers/services/models; frontend separates components/lib/pages</td></tr>
+<tr><td>Code Understanding</td><td>Because each phase is scoped and documented, every design decision here has a stated rationale you can defend in the interview</td></tr>
+</tbody>
+</table>
+</section>
+
+<footer>
+  <p>Airbnb Web App Clone — Architecture &amp; Build Plan.</p>
+  <p>Work through the phases in order; every phase is independently demoable so the project is never in a
+  broken state for long. No dates are attached — pace is up to you.</p>
+</footer>
+</main>
+</div>
+
+<script>
+  mermaid.initialize({
+    startOnLoad:true, theme:'dark',
+    themeVariables:{ background:'#161b22', primaryColor:'#1c2230', primaryTextColor:'#c9d1d9',
+      primaryBorderColor:'#ff5a5f', lineColor:'#8b949e', fontSize:'13px' },
+    flowchart:{useMaxWidth:true, htmlLabels:true, curve:'basis'},
+    sequence:{useMaxWidth:true}
+  });
+</script>
+</body>
+</html>

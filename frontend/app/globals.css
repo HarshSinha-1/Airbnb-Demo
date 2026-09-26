@@ -1,0 +1,125 @@
+@import "tailwindcss";
+
+:root {
+  --rausch: #ff385c;
+  --rausch-hover: #e61e4d;
+  --rausch-active: #e00b41;
+  --rausch-disabled: #ffd1da;
+  --white: #ffffff;
+  --surface-soft: #f7f7f7;
+  --surface-raised: #f2f2f2;
+  --border-default: #dddddd;
+  --border-soft: #ebebeb;
+  --border-strong: #b0b0b0;
+  --text-primary: #222222;
+  --text-body: #3f3f3f;
+  --text-secondary: #6a6a6a;
+  --text-disabled: #929292;
+  --error: #c13515;
+  --success: #008a05;
+  --link-blue: #428bff;
+  --overlay: rgba(0, 0, 0, 0.45);
+}
+
+@theme inline {
+  --color-rausch: var(--rausch);
+  --color-rausch-hover: var(--rausch-hover);
+  --color-rausch-active: var(--rausch-active);
+  --color-rausch-disabled: var(--rausch-disabled);
+  --color-surface-soft: var(--surface-soft);
+  --color-surface-raised: var(--surface-raised);
+  --color-border-default: var(--border-default);
+  --color-border-soft: var(--border-soft);
+  --color-border-strong: var(--border-strong);
+  --color-text-primary: var(--text-primary);
+  --color-text-body: var(--text-body);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-disabled: var(--text-disabled);
+  --color-error: var(--error);
+  --color-success: var(--success);
+  --color-link-blue: var(--link-blue);
+  --font-sans: var(--font-inter);
+  --shadow-float: 0 3px 12px rgba(0, 0, 0, 0.12);
+  --shadow-lift: 0 6px 20px rgba(0, 0, 0, 0.16);
+
+  --animate-shimmer: shimmer 3s ease-in-out infinite;
+  --animate-pulse-slow: pulse-slow 3s ease-in-out infinite;
+  --animate-fade-rise: fade-rise 0.4s ease-out forwards;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes pulse-slow {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(0.96); }
+}
+
+@keyframes fade-rise {
+  0% { opacity: 0; transform: translateY(12px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+html,
+body {
+  background: #ffffff;
+  color: var(--text-primary);
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid #222222;
+  outline-offset: 2px;
+}
+
+.page-gutter {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 1440px;
+  padding-inline: 32px;
+}
+
+@media (min-width: 1128px) {
+  .page-gutter {
+    padding-inline: 48px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .page-gutter {
+    padding-inline: 80px;
+  }
+}
+
+.listing-detail-gutter {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 1120px;
+  padding-inline: 40px;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
