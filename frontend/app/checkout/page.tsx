@@ -1,5 +1,6 @@
 "use client";
 
+import { PaymentProcessing } from "@/components/booking/PaymentProcessing";
 import { PriceBreakdown } from "@/components/booking/PriceBreakdown";
 import { Button } from "@/components/ui/Button";
 import { ErrorState } from "@/components/ui/ErrorState";
@@ -28,7 +29,7 @@ export default function CheckoutPage() {
   const [quote, setQuote] = useState<PriceQuote | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [submitting, setSubmitting] = useState(false);
+  const [processingState, setProcessingState] = useState<"idle" | "processing" | "success">("idle");
   const [nameOnCard, setNameOnCard] = useState("");
 
   useEffect(() => {
@@ -56,18 +57,26 @@ export default function CheckoutPage() {
       showToast("Pick a mock user in the account menu first.", "error");
       return;
     }
-    setSubmitting(true);
+    setProcessingState("processing");
     setError(null);
+    const minDelay = new Promise((resolve) => setTimeout(resolve, 1500));
+
     try {
-      const booking = await api.createBooking({
-        listing_id: listingId,
-        check_in: checkIn,
-        check_out: checkOut,
-        guests,
-      });
+      const [booking] = await Promise.all([
+        api.createBooking({
+          listing_id: listingId,
+          check_in: checkIn,
+          check_out: checkOut,
+          guests,
+        }),
+        minDelay,
+      ]);
+      setProcessingState("success");
+      await new Promise((resolve) => setTimeout(resolve, 800));
       showToast("Booking confirmed");
       router.push(`/booked?id=${booking.id}`);
     } catch (err) {
+      setProcessingState("idle");
       if (err instanceof ApiError && err.status === 409) {
         const message = "Those dates are no longer available. Choose different dates.";
         setError(message);
@@ -77,8 +86,6 @@ export default function CheckoutPage() {
       const message = err instanceof Error ? err.message : "Could not complete booking";
       setError(message);
       showToast(message, "error");
-    } finally {
-      setSubmitting(false);
     }
   };
 
@@ -107,65 +114,74 @@ export default function CheckoutPage() {
     <div className="listing-detail-gutter grid grid-cols-[1fr_400px] gap-20 py-12">
       <div>
         <h1 className="text-[32px] font-semibold leading-[38px]">Confirm and pay</h1>
-        <section className="mt-10">
-          <h2 className="text-[22px] font-semibold">Your trip</h2>
-          <div className="mt-6 flex justify-between">
-            <div>
-              <p className="font-semibold">Dates</p>
-              <p className="text-text-secondary">{formatDateRange(checkIn, checkOut)}</p>
-            </div>
-            <button type="button" className="font-semibold underline" onClick={() => router.back()}>
-              Edit
-            </button>
-          </div>
-          <div className="mt-6 flex justify-between">
-            <div>
-              <p className="font-semibold">Guests</p>
-              <p className="text-text-secondary">
-                {guests} guest{guests === 1 ? "" : "s"}
-              </p>
-            </div>
-            <button type="button" className="font-semibold underline" onClick={() => router.back()}>
-              Edit
-            </button>
-          </div>
-        </section>
 
-        <section className="mt-12 border-t border-border-default pt-10">
-          <h2 className="text-[22px] font-semibold">Pay with</h2>
-          <p className="mt-2 text-sm text-text-secondary">Demo checkout — no real payment is processed.</p>
-          <div className="mt-6 space-y-4">
-            <Field label="Card number" placeholder="•••• •••• •••• ••••" />
-            <div className="grid grid-cols-2 gap-4">
-              <Field label="Expiration" placeholder="MM / YY" />
-              <Field label="CVV" placeholder="123" />
-            </div>
-            <label className="block text-xs font-semibold">
-              Name on card
-              <input
-                value={nameOnCard}
-                onChange={(e) => setNameOnCard(e.target.value)}
-                className="mt-2 h-14 w-full rounded-lg border border-border-strong bg-surface-raised text-text-primary px-4 text-base font-normal focus:outline-none"
-              />
-            </label>
-            <Field label="Country/region" placeholder="India" />
+        {processingState !== "idle" ? (
+          <div className="mt-10">
+            <PaymentProcessing status={processingState} />
           </div>
-        </section>
+        ) : (
+          <>
+            <section className="mt-10">
+              <h2 className="text-[22px] font-semibold">Your trip</h2>
+              <div className="mt-6 flex justify-between">
+                <div>
+                  <p className="font-semibold">Dates</p>
+                  <p className="text-text-secondary">{formatDateRange(checkIn, checkOut)}</p>
+                </div>
+                <button type="button" className="font-semibold underline" onClick={() => router.back()}>
+                  Edit
+                </button>
+              </div>
+              <div className="mt-6 flex justify-between">
+                <div>
+                  <p className="font-semibold">Guests</p>
+                  <p className="text-text-secondary">
+                    {guests} guest{guests === 1 ? "" : "s"}
+                  </p>
+                </div>
+                <button type="button" className="font-semibold underline" onClick={() => router.back()}>
+                  Edit
+                </button>
+              </div>
+            </section>
 
-        {error ? <p className="mt-6 text-error">{error}</p> : null}
+            <section className="mt-12 border-t border-border-default pt-10">
+              <h2 className="text-[22px] font-semibold">Pay with</h2>
+              <p className="mt-2 text-sm text-text-secondary">Demo checkout — no real payment is processed.</p>
+              <div className="mt-6 space-y-4">
+                <Field label="Card number" placeholder="•••• •••• •••• ••••" />
+                <div className="grid grid-cols-2 gap-4">
+                  <Field label="Expiration" placeholder="MM / YY" />
+                  <Field label="CVV" placeholder="123" />
+                </div>
+                <label className="block text-xs font-semibold">
+                  Name on card
+                  <input
+                    value={nameOnCard}
+                    onChange={(e) => setNameOnCard(e.target.value)}
+                    className="mt-2 h-14 w-full rounded-lg border border-border-strong bg-surface-raised text-text-primary px-4 text-base font-normal focus:outline-none"
+                  />
+                </label>
+                <Field label="Country/region" placeholder="India" />
+              </div>
+            </section>
 
-        <Button className="mt-10 w-auto min-w-[220px]" disabled={submitting} onClick={() => void pay()}>
-          {submitting ? "Processing…" : "Confirm and pay"}
-        </Button>
-        {error?.includes("no longer available") ? (
-          <Button
-            variant="secondary"
-            className="ml-3 w-auto"
-            onClick={() => router.push(`/listing/${listingId}`)}
-          >
-            Choose different dates
-          </Button>
-        ) : null}
+            {error ? <p className="mt-6 text-error">{error}</p> : null}
+
+            <Button className="mt-10 w-auto min-w-[220px]" onClick={() => void pay()}>
+              Confirm and pay
+            </Button>
+            {error?.includes("no longer available") ? (
+              <Button
+                variant="secondary"
+                className="ml-3 w-auto"
+                onClick={() => router.push(`/listing/${listingId}`)}
+              >
+                Choose different dates
+              </Button>
+            ) : null}
+          </>
+        )}
       </div>
 
       <aside className="sticky top-[120px] h-fit rounded-xl border border-border-default bg-surface-raised text-text-primary p-6 shadow-lift">

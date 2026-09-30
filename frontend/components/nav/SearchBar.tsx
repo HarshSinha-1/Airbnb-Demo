@@ -124,7 +124,7 @@ export function SearchBar({ compact = false }: { compact?: boolean }) {
       </div>
 
       {open === "where" && (
-        <div className="absolute left-0 top-[78px] z-40 h-[430px] w-[430px] overflow-hidden rounded-[20px] bg-surface-raised border border-border-soft p-6 shadow-lift text-text-primary">
+        <div className="absolute left-0 top-[78px] z-40 max-h-[460px] w-[430px] overflow-y-auto rounded-[20px] bg-surface-raised border border-border-soft p-6 shadow-lift text-text-primary">
           <p className="mb-4 text-sm font-semibold">Suggested destinations</p>
           <div>
             {DESTINATION_SUGGESTIONS.map((item) => (

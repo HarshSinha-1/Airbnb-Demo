@@ -4,6 +4,9 @@ export const PAGE_SIZE = 12;
 
 /** Display-only destination chips — values match seeded listing cities. */
 export const DESTINATION_SUGGESTIONS = [
+  { label: "Lucknow, India", query: "Lucknow" },
+  { label: "Goa, India", query: "Goa" },
+  { label: "Gurgaon, India", query: "Gurgaon" },
   { label: "Malibu, United States", query: "Malibu" },
   { label: "Paris, France", query: "Paris" },
   { label: "Kyoto, Japan", query: "Kyoto" },
